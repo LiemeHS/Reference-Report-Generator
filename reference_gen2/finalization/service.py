@@ -184,7 +184,11 @@ def _sanitize_phase5_results(
     style_hint: str,
 ) -> list[SanitizedPhase5Summary]:
     """Sanitize Phase 5 evaluation results for finalization.
+<<<<<<< HEAD
     
+=======
+
+>>>>>>> f727102 (Update public release files)
     Excludes raw text, DOI, and full candidate details to maintain privacy.
     Only includes opaque IDs and categorical outcomes.
     """

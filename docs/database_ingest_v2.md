@@ -43,14 +43,22 @@ Existing DB files remain readable because Phase 4 ignores missing FTS fields per
 CREATE TABLE search_journal (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     doi TEXT UNIQUE,
+<<<<<<< HEAD
     
+=======
+
+>>>>>>> f727102 (Update public release files)
     -- Display fields
     title TEXT NOT NULL,
     journal TEXT,
     volume TEXT,
     issue TEXT,
     pages TEXT,
+<<<<<<< HEAD
     
+=======
+
+>>>>>>> f727102 (Update public release files)
     -- Matching/search fields
     title_norm TEXT NOT NULL,
     container_text TEXT NOT NULL DEFAULT '',
@@ -58,7 +66,11 @@ CREATE TABLE search_journal (
     author_surnames_json TEXT NOT NULL DEFAULT '[]',
     author_initials_text TEXT NOT NULL DEFAULT '',
     author_text TEXT NOT NULL DEFAULT '',
+<<<<<<< HEAD
     
+=======
+
+>>>>>>> f727102 (Update public release files)
     -- Backward compatibility
     author_surnames_text TEXT NOT NULL DEFAULT '',
     source TEXT NOT NULL DEFAULT 'crossref',
@@ -110,11 +122,19 @@ CREATE TABLE search_book (
     doi TEXT,
     isbn TEXT,
     ol_key TEXT,
+<<<<<<< HEAD
     
     -- Display fields
     title TEXT NOT NULL,
     publisher TEXT,
     
+=======
+
+    -- Display fields
+    title TEXT NOT NULL,
+    publisher TEXT,
+
+>>>>>>> f727102 (Update public release files)
     -- Matching/search fields
     title_norm TEXT NOT NULL,
     year INTEGER,
@@ -123,7 +143,11 @@ CREATE TABLE search_book (
     author_surnames_json TEXT NOT NULL DEFAULT '[]',
     author_initials_text TEXT NOT NULL DEFAULT '',
     author_text TEXT NOT NULL DEFAULT '',
+<<<<<<< HEAD
     
+=======
+
+>>>>>>> f727102 (Update public release files)
     -- Backward compatibility
     author_surnames_text TEXT NOT NULL DEFAULT '',
     source TEXT NOT NULL,
@@ -179,12 +203,20 @@ END;
 CREATE TABLE search_book_chapter (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     doi TEXT,
+<<<<<<< HEAD
     
+=======
+
+>>>>>>> f727102 (Update public release files)
     -- Display fields
     title TEXT NOT NULL,
     book_title TEXT,
     publisher TEXT,
+<<<<<<< HEAD
     
+=======
+
+>>>>>>> f727102 (Update public release files)
     -- Matching/search fields
     title_norm TEXT NOT NULL,
     year INTEGER,
@@ -196,7 +228,11 @@ CREATE TABLE search_book_chapter (
     editor_surnames_json TEXT NOT NULL DEFAULT '[]',
     editor_initials_text TEXT NOT NULL DEFAULT '',
     editor_text TEXT NOT NULL DEFAULT '',
+<<<<<<< HEAD
     
+=======
+
+>>>>>>> f727102 (Update public release files)
     -- Backward compatibility
     author_surnames_text TEXT NOT NULL DEFAULT '',
     editor_surnames_text TEXT NOT NULL DEFAULT '',
@@ -248,13 +284,21 @@ END;
 CREATE TABLE search_conference (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     doi TEXT,
+<<<<<<< HEAD
     
+=======
+
+>>>>>>> f727102 (Update public release files)
     -- Display fields
     title TEXT NOT NULL,
     container TEXT,
     volume TEXT,
     pages TEXT,
+<<<<<<< HEAD
     
+=======
+
+>>>>>>> f727102 (Update public release files)
     -- Matching/search fields
     title_norm TEXT NOT NULL,
     year INTEGER,
@@ -263,7 +307,11 @@ CREATE TABLE search_conference (
     author_surnames_json TEXT NOT NULL DEFAULT '[]',
     author_initials_text TEXT NOT NULL DEFAULT '',
     author_text TEXT NOT NULL DEFAULT '',
+<<<<<<< HEAD
     
+=======
+
+>>>>>>> f727102 (Update public release files)
     -- Backward compatibility
     author_surnames_text TEXT NOT NULL DEFAULT '',
     source TEXT NOT NULL DEFAULT 'crossref',
@@ -351,7 +399,11 @@ def norm_text(text: str | None) -> str:
 
 def extract_initials(given_name: str | None) -> str:
     """Extract initials from given name.
+<<<<<<< HEAD
     
+=======
+
+>>>>>>> f727102 (Update public release files)
     Examples:
         'John' → 'J.'
         'John Andrew' → 'J. A.'
@@ -360,6 +412,7 @@ def extract_initials(given_name: str | None) -> str:
     """
     if not given_name:
         return ""
+<<<<<<< HEAD
     
     # Split on spaces and hyphens
     parts = re.split(r'[\s\-]+', given_name.strip())
@@ -369,39 +422,72 @@ def extract_initials(given_name: str | None) -> str:
         if part and part[0].isalpha():
             initials.append(part[0].upper() + ".")
     
+=======
+
+    # Split on spaces and hyphens
+    parts = re.split(r'[\s\-]+', given_name.strip())
+    initials = []
+
+    for part in parts:
+        if part and part[0].isalpha():
+            initials.append(part[0].upper() + ".")
+
+>>>>>>> f727102 (Update public release files)
     return " ".join(initials)
 
 
 def parse_author_name(full_name: str) -> tuple[str, str]:
     """Parse author name into family and given names.
+<<<<<<< HEAD
     
+=======
+
+>>>>>>> f727102 (Update public release files)
     Handles formats:
         'Smith, John A.' → ('Smith', 'John A.')
         'John A. Smith' → ('Smith', 'John A.')
         'Smith' → ('Smith', '')
+<<<<<<< HEAD
     
+=======
+
+>>>>>>> f727102 (Update public release files)
     Returns:
         (family_name, given_name)
     """
     if not full_name:
         return "", ""
+<<<<<<< HEAD
     
     full_name = full_name.strip()
     
+=======
+
+    full_name = full_name.strip()
+
+>>>>>>> f727102 (Update public release files)
     # Format: "Family, Given"
     if ',' in full_name:
         parts = full_name.split(',', 1)
         family = parts[0].strip()
         given = parts[1].strip() if len(parts) > 1 else ""
         return family, given
+<<<<<<< HEAD
     
+=======
+
+>>>>>>> f727102 (Update public release files)
     # Format: "Given Family" - take last word as family
     parts = full_name.split()
     if len(parts) >= 2:
         family = parts[-1]
         given = " ".join(parts[:-1])
         return family, given
+<<<<<<< HEAD
     
+=======
+
+>>>>>>> f727102 (Update public release files)
     # Single word - assume it's family name
     return full_name, ""
 
@@ -649,10 +735,17 @@ def create_schema(conn: sqlite3.Connection) -> None:
 
 def process_crossref_author(author_obj: dict[str, Any]) -> tuple[str, str]:
     """Extract family and given names from Crossref author object.
+<<<<<<< HEAD
     
     Args:
         author_obj: Crossref author dict with 'family' and optionally 'given' keys
     
+=======
+
+    Args:
+        author_obj: Crossref author dict with 'family' and optionally 'given' keys
+
+>>>>>>> f727102 (Update public release files)
     Returns:
         (family_name, initials)
     """
@@ -664,10 +757,17 @@ def process_crossref_author(author_obj: dict[str, Any]) -> tuple[str, str]:
 
 def process_openlibrary_author(full_name: str) -> tuple[str, str]:
     """Extract family and given names from OpenLibrary author name.
+<<<<<<< HEAD
     
     Args:
         full_name: Full author name string
     
+=======
+
+    Args:
+        full_name: Full author name string
+
+>>>>>>> f727102 (Update public release files)
     Returns:
         (family_name, initials)
     """
@@ -687,6 +787,7 @@ def main() -> int:
     parser.add_argument('--crossref-resume', type=Path, help='Crossref resume file')
     parser.add_argument('--crossref-dir', type=Path, help='Crossref dumps directory')
     parser.add_argument('--output', type=Path, required=True, help='Output database path')
+<<<<<<< HEAD
     
     args = parser.parse_args()
     
@@ -697,6 +798,18 @@ def main() -> int:
     # TODO: Add your ingest logic here using the helper functions above
     print("Schema created. Add ingest logic to populate tables.")
     
+=======
+
+    args = parser.parse_args()
+
+    print(f"Creating database: {args.output}")
+    conn = sqlite3.connect(str(args.output))
+    create_schema(conn)
+
+    # TODO: Add your ingest logic here using the helper functions above
+    print("Schema created. Add ingest logic to populate tables.")
+
+>>>>>>> f727102 (Update public release files)
     conn.close()
     return 0
 

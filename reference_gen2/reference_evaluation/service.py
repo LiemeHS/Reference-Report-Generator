@@ -1207,7 +1207,11 @@ def evaluate_reference(
         evidence_ambiguity_gap = config.ambiguity_gap_safe
     structure_penalty = compute_structure_penalty(parsed, evaluation_phase4, config, component_scores)
     type_penalty = compute_type_penalty(parsed, best_candidate, config)
+<<<<<<< HEAD
     
+=======
+
+>>>>>>> f727102 (Update public release files)
     penalties = {
         "ambiguity": ambiguity_penalty,
         "structure": structure_penalty,
@@ -1307,10 +1311,17 @@ def evaluate_references(
             f"parsed_results ({len(parsed_results)}) and "
             f"phase4_results ({len(phase4_results)}) must have same length"
         )
+<<<<<<< HEAD
     
     if config is None:
         config = Phase5RuntimeConfig()
     
+=======
+
+    if config is None:
+        config = Phase5RuntimeConfig()
+
+>>>>>>> f727102 (Update public release files)
     return [
         evaluate_reference(parsed, phase4, config=config)
         for parsed, phase4 in zip(parsed_results, phase4_results)

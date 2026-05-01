@@ -235,7 +235,11 @@ def _container_score(parsed_result, candidate):
     candidate_text = normalize_text(
         candidate.title or candidate.container_title or candidate.publisher
     )
+<<<<<<< HEAD
     
+=======
+
+>>>>>>> f727102 (Update public release files)
     if source_text == candidate_text:
         return 1.0
     else:

@@ -697,7 +697,11 @@ def _build_search_configs(
         )
         chapter_main_title_terms = chapter_main_title_terms or chapter_title_terms
         chapter_title_prefix_2 = chapter_title_terms[:2]
+<<<<<<< HEAD
         
+=======
+
+>>>>>>> f727102 (Update public release files)
         # Book-chapter match preparation stores the containing book under
         # `book_title`; keep `container_title` as a backward-compatible fallback.
         book_title = _first_list_item(query_fields.get("book_title", [])) or _first_list_item(
@@ -715,9 +719,15 @@ def _build_search_configs(
             prefer_distinctive=config.prefer_distinctive_title_terms,
         )
         book_main_title_terms = book_main_title_terms or book_title_terms
+<<<<<<< HEAD
         
         near_year_enabled = config.enable_near_year_fallback and bool(issued_year)
         
+=======
+
+        near_year_enabled = config.enable_near_year_fallback and bool(issued_year)
+
+>>>>>>> f727102 (Update public release files)
         # Interleave chapter and book searches for better performance.
         # Use ±1 year tolerance on early configs to catch year mismatches faster.
         configs = [
@@ -752,7 +762,11 @@ def _build_search_configs(
                 strictness="strict",
             ),
         ]
+<<<<<<< HEAD
         
+=======
+
+>>>>>>> f727102 (Update public release files)
         # Add book title searches early (interleaved with chapter searches).
         # These help find chapters indexed only at the book level in OpenLibrary.
         if book_title_terms:
@@ -842,7 +856,11 @@ def _build_search_configs(
                     enabled_by_default=near_year_enabled,
                 ),
             ])
+<<<<<<< HEAD
         
+=======
+
+>>>>>>> f727102 (Update public release files)
         return _drop_empty_configs(_dedupe_search_configs(configs))
     return []
 
