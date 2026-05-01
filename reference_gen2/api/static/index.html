@@ -1,0 +1,210 @@
+<!doctype html>
+<html lang="nl">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Referentierapport Generator</title>
+    <link rel="stylesheet" href="/static/phase7.css">
+  </head>
+  <body>
+    <header class="topbar">
+      <div class="wrap topbar-inner">
+        <div class="brand">
+          <div class="mark" aria-hidden="true">R</div>
+          <div>
+            <p class="eyebrow">Referentierapport Generator</p>
+            <h1 class="brand-title">Literatuurbroncontrole</h1>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <main class="wrap">
+      <section class="hero">
+        <div>
+          <h2>Genereer eenvoudig een rapport voor het beoordelen van de literatuurlijst.</h2>
+          <p class="lead">
+            Upload een studentenpaper of wetenschappelijk document. Het systeem controleert de literatuurlijst aan de hand van bestaande wetenschappelijke bronvermeldingen.
+          </p>
+
+          <div class="cards" aria-label="Proces">
+            <article class="mini-card">
+              <h3>Uploaden</h3>
+              <p>Kies een PDF- of DOCX-bestand.</p>
+            </article>
+            <article class="mini-card">
+              <h3>Bronnen vergelijken</h3>
+              <p>De bronnen worden gecontroleerd met de lokale brondatabase.</p>
+            </article>
+            <article class="mini-card">
+              <h3>Rapport openen</h3>
+              <p>Open het statische HTML-rapport zodra het klaarstaat.</p>
+            </article>
+          </div>
+        </div>
+
+        <section class="panel" aria-labelledby="report-title">
+          <div class="panel-head">
+            <h3 id="report-title">Rapport maken</h3>
+            <p class="muted">Upload een document of plak alleen de referentielijst.</p>
+          </div>
+
+          <div class="mode-tabs" role="tablist" aria-label="Invoermethode">
+            <button class="mode-tab" id="upload-tab" type="button" role="tab" aria-selected="true" aria-controls="upload-panel">Bestand uploaden</button>
+            <button class="mode-tab" id="text-tab" type="button" role="tab" aria-selected="false" aria-controls="text-panel">Tekst plakken</button>
+          </div>
+
+          <div class="mode-panel" id="upload-panel" role="tabpanel" aria-labelledby="upload-tab">
+            <form id="upload-form" action="/reports/upload" method="post" enctype="multipart/form-data" novalidate>
+              <label class="dropzone" id="dropzone">
+                <input class="file-input" id="file" name="file" type="file" accept=".pdf,.docx,application/pdf,application/vnd.openxmlformats-officedocument.wordprocessingml.document" required>
+                <span class="dropzone-content">
+                  <span class="upload-icon" aria-hidden="true">
+                    <svg width="28" height="28" viewBox="0 0 24 24" fill="none">
+                      <path d="M12 16.5V6.75m0 0L8.25 10.5M12 6.75l3.75 3.75M3.75 15v3A2.25 2.25 0 0 0 6 20.25h12A2.25 2.25 0 0 0 20.25 18v-3" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                  </span>
+                  <span class="upload-title">Sleep hier je PDF of DOCX naartoe</span>
+                  <span class="muted">of klik om een bestand te kiezen.</span>
+                  <span class="chips" aria-hidden="true">
+                    <span class="chip">PDF</span>
+                    <span class="chip">DOCX</span>
+                  </span>
+                  <span class="file-name" id="file-name"></span>
+                </span>
+              </label>
+
+              <div class="controls">
+                <select id="style-hint" name="style_hint" aria-label="Citaatstijl">
+                  <option value="unknown">Stijl: automatisch</option>
+                  <option value="apa7_nl">APA 7 Nederlands</option>
+                  <option value="apa7_en">APA 7 Engels</option>
+                  <option value="chicago">Chicago</option>
+                  <option value="harvard">Harvard</option>
+                  <option value="mla">MLA</option>
+                  <option value="vancouver">Vancouver</option>
+                </select>
+                <button id="submit" type="submit"><span class="btn-label">Rapport genereren</span></button>
+              </div>
+            </form>
+          </div>
+
+          <div class="mode-panel" id="text-panel" role="tabpanel" aria-labelledby="text-tab" hidden>
+            <form id="text-form" action="/reports/text" method="post" novalidate>
+              <label for="reference-list-text" class="muted">Plak de referentielijst als platte tekst.</label>
+              <textarea id="reference-list-text" name="reference_list_text" maxlength="120000" placeholder="Plak hier je referenties..." autocomplete="off" autocapitalize="off" spellcheck="false"></textarea>
+              <div class="char-count" id="char-count">0 tekens</div>
+              <div class="controls">
+                <select id="text-style-hint" name="style_hint" aria-label="Citaatstijl voor tekst">
+                  <option value="unknown">Stijl: automatisch</option>
+                  <option value="apa7_nl">APA 7 Nederlands</option>
+                  <option value="apa7_en">APA 7 Engels</option>
+                  <option value="chicago">Chicago</option>
+                  <option value="harvard">Harvard</option>
+                  <option value="mla">MLA</option>
+                  <option value="vancouver">Vancouver</option>
+                </select>
+                <button id="text-submit" type="submit"><span class="btn-label">Rapport genereren</span></button>
+              </div>
+            </form>
+          </div>
+
+          <div class="result" id="result" hidden>
+            <div class="result-actions">
+              <a class="report-link" id="open-report" href="#" target="_blank" rel="noopener noreferrer">Open rapport</a>
+            </div>
+          </div>
+
+          <div class="status" id="status" role="status" aria-live="polite"></div>
+        </section>
+      </section>
+
+      <section class="info-grid" aria-label="Meer informatie">
+        <article class="info">
+          <p class="eyebrow">Privacy</p>
+          <h3>Ontworpen voor zorgvuldige verwerking.</h3>
+          <p class="muted">
+            De pagina bewaart geen documentinhoud in de browser. Het rapport wordt kortstondig op de server klaargezet onder sessiebeheer en blijft beschikbaar zolang de sessie/TTL geldig is.
+          </p>
+        </article>
+        <article class="info">
+          <p class="eyebrow">Rapportage</p>
+          <h3>Een statisch HTML-rapport.</h3>
+          <p class="muted">
+            Het rapport opent in een nieuw tabblad en bevat de gesanitiseerde beoordeling van de literatuurlijst.
+          </p>
+        </article>
+        <article class="info">
+          <p class="eyebrow">Automatisch</p>
+          <h3>Stijlautomatisering</h3>
+          <p class="muted">
+            Bij <strong>Stijl: automatisch</strong> controleert de engine eerst op nummering (Vancouver), daarna op
+            APA-signalen (nummers, jaartallen, en Nederlandse/Engelse kop- en opmaakcues). Bij voldoende signalen wordt
+            de stijl automatisch gezet voor segmentatie en parsing.
+          </p>
+        </article>
+      </section>
+
+      <footer class="site-footer">
+        <a class="github-info-link" href="https://github.com/placeholder/reference-gen2" target="_blank" rel="noopener noreferrer">
+          <svg class="github-icon" viewBox="0 0 24 24" width="16" height="16" aria-hidden="true" focusable="false">
+            <path fill="currentColor" d="M12 2C6.48 2 2 6.59 2 12.25c0 4.53 2.87 8.37 6.84 9.73.5.1.68-.22.68-.49 0-.24-.01-1.05-.01-1.9-2.78.62-3.37-1.22-3.37-1.22-.45-1.19-1.11-1.5-1.11-1.5-.91-.64.07-.63.07-.63 1 .07 1.53 1.06 1.53 1.06.89 1.56 2.34 1.11 2.91.85.09-.66.35-1.11.63-1.36-2.22-.26-4.56-1.14-4.56-5.06 0-1.12.39-2.03 1.03-2.75-.1-.26-.45-1.3.1-2.71 0 0 .84-.28 2.75 1.05A9.35 9.35 0 0 1 12 6.98c.85 0 1.7.12 2.5.34 1.91-1.33 2.75-1.05 2.75-1.05.55 1.41.2 2.45.1 2.71.64.72 1.03 1.63 1.03 2.75 0 3.93-2.34 4.8-4.57 5.05.36.32.68.94.68 1.9 0 1.37-.01 2.47-.01 2.81 0 .27.18.59.69.49A10.22 10.22 0 0 0 22 12.25C22 6.59 17.52 2 12 2Z"/>
+          </svg>
+          <span>Meer informatie op GitHub</span>
+        </a>
+        <span class="footer-version">v0.2</span>
+      </footer>
+    </main>
+
+    <aside class="cookie-notice" id="cookie-notice" aria-labelledby="cookie-title">
+      <div class="cookie-notice-inner">
+        <div class="cookie-copy">
+          <p class="eyebrow">Cookies</p>
+          <h2 id="cookie-title">Alleen noodzakelijke cookies</h2>
+          <p>
+            Deze website gebruikt alleen een noodzakelijke sessiecookie om je rapportaanvraag aan deze browser te koppelen.
+            Zo kan de app de status ophalen, het rapport openen en misbruik beperken. We gebruiken geen analytics,
+            advertenties, trackingcookies of cookies van derden.
+          </p>
+          <div class="cookie-details" id="cookie-details" hidden>
+            <dl>
+              <div>
+                <dt>Cookie</dt>
+                <dd><code>reference_gen2_session</code></dd>
+              </div>
+              <div>
+                <dt>Doel</dt>
+                <dd>Sessiebeheer voor rapportaanvragen, rapporttoegang en beveiliging tegen misbruik.</dd>
+              </div>
+              <div>
+                <dt>Bewaartermijn</dt>
+                <dd>Maximaal 1 uur.</dd>
+              </div>
+              <div>
+                <dt>Inhoud</dt>
+                <dd>Een willekeurig sessienummer; geen documentinhoud, referenties, naam of e-mailadres.</dd>
+              </div>
+              <div>
+                <dt>Als je cookies blokkeert</dt>
+                <dd>
+                  De pagina blijft zichtbaar, maar rapportstatus ophalen of het rapport openen kan mislukken omdat de
+                  server de rapportaanvraag niet meer betrouwbaar aan dezelfde browser kan koppelen.
+                </dd>
+              </div>
+            </dl>
+            <p class="cookie-storage-note">
+              Als je op <strong>Begrepen</strong> klikt, onthoudt de browser lokaal dat deze melding is gesloten. Die
+              voorkeur blijft op dit apparaat en wordt niet gebruikt om je te volgen.
+            </p>
+          </div>
+        </div>
+        <div class="cookie-actions">
+          <button class="cookie-secondary" id="cookie-details-toggle" type="button" aria-expanded="false" aria-controls="cookie-details">Meer informatie</button>
+          <button id="cookie-dismiss" type="button">Begrepen</button>
+        </div>
+      </div>
+    </aside>
+
+    <script src="/static/phase7.js"></script>
+  </body>
+</html>

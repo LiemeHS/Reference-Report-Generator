@@ -1,0 +1,7 @@
+-c constraints.txt
+citeproc-py
+fastapi
+pdfplumber
+python-multipart
+python-docx
+uvicorn

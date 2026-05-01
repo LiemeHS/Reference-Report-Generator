@@ -1,0 +1,39 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "reference-gen2"
+version = "0.1.0"
+description = "Phase 1 document-path library for secure bibliography extraction."
+readme = "README.md"
+requires-python = ">=3.11"
+dependencies = [
+  "citeproc-py",
+  "fastapi",
+  "pdfplumber",
+  "python-multipart",
+  "python-docx",
+  "uvicorn",
+]
+
+[project.optional-dependencies]
+test = [
+  "httpx",
+  "pytest",
+]
+
+[tool.setuptools]
+package-dir = {"" = "."}
+
+[tool.setuptools.packages.find]
+where = ["."]
+include = ["reference_gen2*"]
+
+[tool.setuptools.package-data]
+"reference_gen2.citation_rendering" = ["styles/*.csl"]
+"reference_gen2.api.static" = ["*.html", "*.css", "*.js"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+pythonpath = ["."]

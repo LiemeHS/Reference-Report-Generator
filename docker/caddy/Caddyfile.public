@@ -1,0 +1,34 @@
+{
+	email {$ACME_EMAIL:admin@example.com}
+}
+
+{$APP_DOMAIN} {
+	encode zstd gzip
+
+	header {
+		Strict-Transport-Security "max-age=31536000; includeSubDomains"
+		X-Content-Type-Options nosniff
+		X-Frame-Options DENY
+		Referrer-Policy no-referrer
+		Permissions-Policy "camera=(), microphone=(), geolocation=(), payment=()"
+		-Server
+	}
+
+	# Request body size limit (25 MiB to match REFERENCE_GEN2_API_MAX_REQUEST_BYTES).
+	request_body {
+		max_size 25MB
+	}
+
+	reverse_proxy api:8000 {
+		header_up Host {host}
+		header_up X-Forwarded-For {remote_host}
+		header_up X-Real-IP {remote_host}
+		header_up X-Forwarded-Proto https
+		header_up X-Forwarded-Host {host}
+
+		transport http {
+			read_timeout 120s
+			write_timeout 120s
+		}
+	}
+}
