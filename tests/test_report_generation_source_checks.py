@@ -218,6 +218,27 @@ def test_report_source_vs_found_is_collapsed_by_default_without_long_help_text()
 
     assert '<details class="field-comparison">' in html
     assert '<details open class="field-comparison">' not in html
+
+
+def test_report_uses_dutch_user_facing_confidence_and_database_labels():
+    report = _report_for(
+        _reference(
+            "r1",
+            "journal_article",
+            {
+                "Title": "Short title",
+                "Authors": "Smith, Jane",
+            },
+        )
+    )
+    report["phase5"][0]["final_confidence"] = "high"
+
+    html = render_html_report(report)
+
+    assert "<span>Zekerheid</span><b>Hoog</b>" in html
+    assert "<span>Databasecontrole</span><b>Kandidaat gevonden</b>" in html
+    assert "<span>Confidence</span>" not in html
+    assert "<span>Fase 4</span>" not in html
     assert "Bron vs gevonden bron" in html
     assert "Dit overzicht vergelijkt wat in de aangeleverde bronvermelding staat" not in html
     assert "Voor extra informatie" not in html

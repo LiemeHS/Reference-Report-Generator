@@ -71,3 +71,4 @@ def test_warm_localdb_cache_uses_readonly_bounded_probes(tmp_path):
 
     assert warm_localdb_cache(str(db_path), max_seconds=1)
     assert not warm_localdb_cache(str(db_path), max_seconds=0)
+

@@ -523,10 +523,10 @@ def _render_reference_card(row: dict[str, Any]) -> str:
     <div class="status-chip status-{_status_class(filter_status)}">{_label(filter_status)}</div>
   </div>
   <div class="card-grid">
-    <div><span>Zekerheid</span><b>{_e(row.get("final_confidence", "none"))}</b></div>
+    <div><span>Zekerheid</span><b>{_e(_confidence_label(row.get("final_confidence", "none")))}</b></div>
     <div><span>Score</span><b>{_score(row.get("confidence_score"))}</b></div>
     <div><span>Type</span><b>{_e(_source_type_label(row.get("ctype", "unknown")))}</b></div>
-    <div><span>Fase 4</span><b>{_e(_status_text(row.get("phase4_status", "not_run")))}</b></div>
+    <div><span>Databasecontrole</span><b>{_e(_status_text(row.get("phase4_status", "not_run")))}</b></div>
   </div>
   <meter class="score-meter" min="0" max="1" value="{_score_value(row.get("confidence_score"))}" aria-label="Zekerheidsscore">{_score(row.get("confidence_score"))}</meter>
   {_render_next_steps(row, filter_status)}
@@ -968,6 +968,18 @@ def _source_type_label(value: Any) -> str:
         "unknown": "Onbekend",
         "webpage": "Webpagina",
         "website": "Website",
+    }
+    return labels.get(normalized, _display_label(normalized))
+
+
+def _confidence_label(value: Any) -> str:
+    normalized = str(value or "none").strip().lower().replace("-", "_")
+    labels = {
+        "high": "Hoog",
+        "medium": "Gemiddeld",
+        "low": "Laag",
+        "none": "Geen",
+        "unknown": "Onbekend",
     }
     return labels.get(normalized, _display_label(normalized))
 

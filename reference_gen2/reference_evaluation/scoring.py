@@ -37,11 +37,7 @@ def compute_doi_score(match_signals: Phase4MatchSignals, *, source_has_doi: bool
 
 def compute_title_score(match_signals: Phase4MatchSignals) -> float:
     """Compute title component score from Phase 4 match signals.
-<<<<<<< HEAD
     
-=======
-
->>>>>>> f727102 (Update public release files)
     Mapping:
     - exact_or_near_exact -> 1.00
     - strong -> 0.82
@@ -64,11 +60,7 @@ def compute_title_score(match_signals: Phase4MatchSignals) -> float:
 
 def compute_author_score(match_signals: Phase4MatchSignals) -> float:
     """Compute author component score from Phase 4 match signals.
-<<<<<<< HEAD
     
-=======
-
->>>>>>> f727102 (Update public release files)
     Mapping:
     - strong -> 1.00
     - partial -> 0.65
@@ -88,11 +80,7 @@ def compute_author_score(match_signals: Phase4MatchSignals) -> float:
 
 def compute_year_score(match_signals: Phase4MatchSignals) -> float:
     """Compute year component score from Phase 4 match signals.
-<<<<<<< HEAD
     
-=======
-
->>>>>>> f727102 (Update public release files)
     Mapping:
     - exact -> 1.00
     - near -> 0.55
@@ -112,11 +100,7 @@ def compute_year_score(match_signals: Phase4MatchSignals) -> float:
 
 def compute_container_score(match_signals: Phase4MatchSignals) -> float:
     """Compute container/publisher component score from Phase 4 match signals.
-<<<<<<< HEAD
     
-=======
-
->>>>>>> f727102 (Update public release files)
     Mapping:
     - yes -> 1.00
     - unknown -> 0.30
@@ -133,20 +117,12 @@ def compute_container_score(match_signals: Phase4MatchSignals) -> float:
 
 def compute_metadata_score(match_signals: Phase4MatchSignals, ctype: str) -> float:
     """Compute metadata component score from Phase 4 match signals.
-<<<<<<< HEAD
     
-=======
-
->>>>>>> f727102 (Update public release files)
     Type-sensitive scoring:
     - journal_article: uses volume/issue/pages support
     - book: neutral (0.40) unless edition/publisher evidence available
     - book_chapter: rewards chapter pages or chapter DOI
-<<<<<<< HEAD
     
-=======
-
->>>>>>> f727102 (Update public release files)
     Mapping:
     - exact -> 1.00
     - partial -> 0.60
@@ -154,20 +130,12 @@ def compute_metadata_score(match_signals: Phase4MatchSignals, ctype: str) -> flo
     - mismatch -> 0.00
     """
     metadata_signal = match_signals.volume_issue_pages_match
-<<<<<<< HEAD
     
-=======
-
->>>>>>> f727102 (Update public release files)
     # For non-article types, default to neutral unless explicit signal
     if ctype not in ("journal_article", "book_chapter"):
         if metadata_signal == "unknown":
             return 0.25
-<<<<<<< HEAD
     
-=======
-
->>>>>>> f727102 (Update public release files)
     if metadata_signal == "exact":
         return 1.00
     elif metadata_signal == "partial":
@@ -183,30 +151,18 @@ def compute_ambiguity_penalty(
     config: Phase5RuntimeConfig,
 ) -> tuple[float, float | None]:
     """Compute ambiguity penalty based on gap between top 2 candidates.
-<<<<<<< HEAD
     
-=======
-
->>>>>>> f727102 (Update public release files)
     Returns:
         (penalty, gap) where gap is None if < 2 candidates
     """
     if len(top_candidates) < 2:
         return 0.0, None
-<<<<<<< HEAD
     
-=======
-
->>>>>>> f727102 (Update public release files)
     # Use ordering_score from Phase 4 for gap calculation
     top_score = top_candidates[0].ordering_score
     runner_up_score = top_candidates[1].ordering_score
     gap = abs(top_score - runner_up_score)
-<<<<<<< HEAD
     
-=======
-
->>>>>>> f727102 (Update public release files)
     # Apply penalty based on gap thresholds
     if gap >= config.ambiguity_gap_safe:
         return 0.0, gap
@@ -225,11 +181,7 @@ def compute_structure_penalty(
     component_scores: dict[str, float] | None = None,
 ) -> float:
     """Compute structure penalty for internally suspicious matches.
-<<<<<<< HEAD
     
-=======
-
->>>>>>> f727102 (Update public release files)
     Penalties applied for:
     - Strong title match but DOI mismatch
     - Strong title match but zero author overlap
@@ -238,17 +190,10 @@ def compute_structure_penalty(
     """
     if not phase4.best_candidate:
         return 0.0
-<<<<<<< HEAD
     
     match_signals = phase4.best_candidate.match_signals
     penalty = 0.0
     
-=======
-
-    match_signals = phase4.best_candidate.match_signals
-    penalty = 0.0
-
->>>>>>> f727102 (Update public release files)
     # DOI mismatch with strong title is major concern
     if match_signals.doi_match_type == "mismatch" and match_signals.title_match_strength in (
         "exact_or_near_exact",
@@ -258,11 +203,7 @@ def compute_structure_penalty(
 
     if has_journal_title_author_tension(parsed, match_signals, component_scores):
         penalty += config.structure_penalty_major
-<<<<<<< HEAD
     
-=======
-
->>>>>>> f727102 (Update public release files)
     # For books, exact title + year + publisher is strong bibliographic support.
     # A missing/misparsed author should stay reviewable, but it is not by itself
     # a structural contradiction.
@@ -287,11 +228,7 @@ def compute_structure_penalty(
         and match_signals.year_match_type == "mismatch"
     ):
         penalty += config.structure_penalty_medium
-<<<<<<< HEAD
     
-=======
-
->>>>>>> f727102 (Update public release files)
     # Journal article without container support
     if (
         parsed.ctype == "journal_article"
@@ -300,11 +237,7 @@ def compute_structure_penalty(
         and parsed.match_preparation.lookup_key_fields.get("container_title")
     ):
         penalty += config.structure_penalty_minor
-<<<<<<< HEAD
     
-=======
-
->>>>>>> f727102 (Update public release files)
     return penalty
 
 
@@ -314,26 +247,16 @@ def compute_type_penalty(
     config: Phase5RuntimeConfig,
 ) -> float:
     """Compute type penalty for granularity mismatch.
-<<<<<<< HEAD
     
-=======
-
->>>>>>> f727102 (Update public release files)
     Penalties applied when candidate granularity doesn't align with input type:
     - book_chapter -> book-level record only
     - article-like reference -> book-level candidate
     """
     if not best_candidate:
         return 0.0
-<<<<<<< HEAD
     
     penalty = 0.0
     
-=======
-
-    penalty = 0.0
-
->>>>>>> f727102 (Update public release files)
     # Book chapter matched to book-level record.
     if parsed.ctype == "book_chapter":
         if best_candidate.record_granularity == "book":
@@ -345,19 +268,11 @@ def compute_type_penalty(
             )
             if not has_chapter_support:
                 penalty += config.type_penalty_minor
-<<<<<<< HEAD
     
     # Article-like reference matched to book record.
     if parsed.ctype == "journal_article" and best_candidate.record_granularity == "book":
         penalty += config.type_penalty_major
     
-=======
-
-    # Article-like reference matched to book record.
-    if parsed.ctype == "journal_article" and best_candidate.record_granularity == "book":
-        penalty += config.type_penalty_major
-
->>>>>>> f727102 (Update public release files)
     return penalty
 
 
@@ -367,11 +282,7 @@ def compute_final_score(
     config: Phase5RuntimeConfig,
 ) -> tuple[float, float]:
     """Compute final confidence score from components and penalties.
-<<<<<<< HEAD
     
-=======
-
->>>>>>> f727102 (Update public release files)
     Returns:
         (raw_score, final_score) where final_score is clamped to [0.0, 1.0]
     """
@@ -384,7 +295,6 @@ def compute_final_score(
         + component_scores["doi"] * config.doi_weight
         + component_scores["metadata"] * config.metadata_weight
     )
-<<<<<<< HEAD
     
     # Apply penalties
     final_score = raw_score - sum(penalties.values())
@@ -392,13 +302,4 @@ def compute_final_score(
     # Clamp to [0.0, 1.0]
     final_score = max(0.0, min(1.0, final_score))
     
-=======
-
-    # Apply penalties
-    final_score = raw_score - sum(penalties.values())
-
-    # Clamp to [0.0, 1.0]
-    final_score = max(0.0, min(1.0, final_score))
-
->>>>>>> f727102 (Update public release files)
     return raw_score, final_score

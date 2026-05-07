@@ -65,6 +65,20 @@ def test_phase7_index_explains_essential_cookie_without_consent_gate():
     assert "cookieDismiss.addEventListener(\"click\"" in script
 
 
+def test_phase7_index_uses_user_facing_process_copy():
+    html = (STATIC_DIR / "index.html").read_text(encoding="utf-8")
+
+    assert "tijdelijk op de server klaargezet" in html
+    assert "maximaal 1 uur beschikbaar" in html
+    assert "toont per bron" in html
+    assert "Stijlherkenning" in html
+    assert "referentiestijl te herkennen" in html
+    assert "sessie/TTL" not in html
+    assert "gesanitiseerde beoordeling" not in html
+    assert "controleert de engine" not in html
+    assert "segmentatie en parsing" not in html
+
+
 def test_phase7_frontend_has_specific_upload_failure_messages():
     script = (STATIC_DIR / "phase7.js").read_text(encoding="utf-8")
 

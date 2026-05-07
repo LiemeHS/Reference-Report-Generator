@@ -157,21 +157,13 @@ def parse_references(
 ) -> list[ParsedReferenceResult]:
     """
     Parse multiple references using batch processing for better performance.
-<<<<<<< HEAD
     
-=======
-
->>>>>>> f727102 (Update public release files)
     This function uses the batch AnyStyle adapter to parse all references in a single
     subprocess call, which is significantly faster than parsing them one at a time.
     """
     if not references:
         return []
-<<<<<<< HEAD
     
-=======
-
->>>>>>> f727102 (Update public release files)
     # Prepare cleaned references for batch parsing
     cleaned_references: list[str] = []
     for raw_ref in references:
@@ -180,25 +172,15 @@ def parse_references(
         else:
             cleaned = _cleanup_reference_for_style(raw_ref, style_hint)
             cleaned_references.append(cleaned)
-<<<<<<< HEAD
     
     raw_tags_batch = _parse_reference_tags_batch(cleaned_references)
     
-=======
-
-    raw_tags_batch = _parse_reference_tags_batch(cleaned_references)
-
->>>>>>> f727102 (Update public release files)
     # Process each parsed result
     results: list[ParsedReferenceResult] = []
     for i, raw_reference in enumerate(references):
         cleaned_reference = cleaned_references[i]
         raw_tags = raw_tags_batch[i] if i < len(raw_tags_batch) else None
-<<<<<<< HEAD
         
-=======
-
->>>>>>> f727102 (Update public release files)
         # Handle empty references
         if not raw_reference.strip():
             results.append(ParsedReferenceResult(
@@ -218,21 +200,13 @@ def parse_references(
                 ),
             ))
             continue
-<<<<<<< HEAD
         
-=======
-
->>>>>>> f727102 (Update public release files)
         # Classify and parse
         pre_classification = classify_reference_pre_parse(cleaned_reference)
         parse_profile = _parse_profile_name(style_hint, pre_classification.ctype)
         parsed = _map_anystyle_tags(raw_tags)
         parsed = _apply_raw_year_fallback(parsed, cleaned_reference)
-<<<<<<< HEAD
         
-=======
-
->>>>>>> f727102 (Update public release files)
         if style_hint == "apa7_nl":
             parsed = apply_apa7_nl_rules(parsed, cleaned_reference)
             parsed = repair_parsed_reference_for_ctype(
@@ -240,32 +214,20 @@ def parse_references(
                 cleaned_reference,
                 pre_classification.ctype,
             )
-<<<<<<< HEAD
         
-=======
-
->>>>>>> f727102 (Update public release files)
         post_classification, classifier_warnings = classify_reference_post_parse(
             cleaned_reference,
             parsed,
             pre_classification,
         )
-<<<<<<< HEAD
         
-=======
-
->>>>>>> f727102 (Update public release files)
         if style_hint == "apa7_nl":
             parsed = repair_parsed_reference_for_ctype(
                 parsed,
                 cleaned_reference,
                 post_classification.ctype,
             )
-<<<<<<< HEAD
         
-=======
-
->>>>>>> f727102 (Update public release files)
         warnings = _warnings_for_result(parsed, raw_tags)
         warnings.extend(
             warning for warning in classifier_warnings if warning not in warnings
@@ -278,11 +240,7 @@ def parse_references(
             match_preparation,
             warnings,
         )
-<<<<<<< HEAD
         
-=======
-
->>>>>>> f727102 (Update public release files)
         results.append(ParsedReferenceResult(
             reference_id=_reference_id_for(cleaned_reference),
             raw_reference=raw_reference,
@@ -299,11 +257,7 @@ def parse_references(
             match_preparation=match_preparation,
             report_basis=report_basis,
         ))
-<<<<<<< HEAD
     
-=======
-
->>>>>>> f727102 (Update public release files)
     return results
 
 

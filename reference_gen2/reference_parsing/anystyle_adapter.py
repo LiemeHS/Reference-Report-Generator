@@ -123,7 +123,6 @@ def parse_reference_tags(reference_text: str) -> dict[str, Any] | None:
 def parse_reference_tags_batch(references: list[str]) -> list[dict[str, Any] | None]:
     """
     Parse multiple references in a single AnyStyle subprocess call.
-<<<<<<< HEAD
     
     This is significantly faster than calling parse_reference_tags() in a loop
     because it avoids the overhead of spawning a subprocess for each reference.
@@ -131,52 +130,27 @@ def parse_reference_tags_batch(references: list[str]) -> list[dict[str, Any] | N
     Args:
         references: List of raw reference strings to parse
         
-=======
-
-    This is significantly faster than calling parse_reference_tags() in a loop
-    because it avoids the overhead of spawning a subprocess for each reference.
-
-    Args:
-        references: List of raw reference strings to parse
-
->>>>>>> f727102 (Update public release files)
     Returns:
         List of parsed tag dictionaries (or None for unparseable references),
         in the same order as the input references
     """
     if not references:
         return []
-<<<<<<< HEAD
     
     # Filter and track which references are non-empty
     cleaned_refs: list[str] = []
     index_map: list[int] = []  # Maps cleaned_refs index to original references index
     
-=======
-
-    # Filter and track which references are non-empty
-    cleaned_refs: list[str] = []
-    index_map: list[int] = []  # Maps cleaned_refs index to original references index
-
->>>>>>> f727102 (Update public release files)
     for i, ref in enumerate(references):
         cleaned = ref.strip()
         if cleaned:
             cleaned_refs.append(cleaned)
             index_map.append(i)
-<<<<<<< HEAD
     
     # If all references are empty, return all None
     if not cleaned_refs:
         return [None] * len(references)
     
-=======
-
-    # If all references are empty, return all None
-    if not cleaned_refs:
-        return [None] * len(references)
-
->>>>>>> f727102 (Update public release files)
     # Write all non-empty references to a single temp file
     with tempfile.NamedTemporaryFile(
         mode="w",
@@ -188,11 +162,7 @@ def parse_reference_tags_batch(references: list[str]) -> list[dict[str, Any] | N
             handle.write(f"{ref}\n")
         handle.flush()
         command = _command_for_input(Path(handle.name))
-<<<<<<< HEAD
         
-=======
-
->>>>>>> f727102 (Update public release files)
         try:
             result = subprocess.run(
                 command,
@@ -214,11 +184,7 @@ def parse_reference_tags_batch(references: list[str]) -> list[dict[str, Any] | N
                 "AnyStyle could not be executed safely.",
                 http_status=503,
             ) from exc
-<<<<<<< HEAD
     
-=======
-
->>>>>>> f727102 (Update public release files)
     if result.returncode != 0:
         details: dict[str, Any] = {"returncode": result.returncode}
         stderr = (result.stderr or "").strip()
@@ -230,11 +196,7 @@ def parse_reference_tags_batch(references: list[str]) -> list[dict[str, Any] | N
             http_status=503,
             details=details,
         )
-<<<<<<< HEAD
     
-=======
-
->>>>>>> f727102 (Update public release files)
     try:
         payload = json.loads(result.stdout or "[]")
     except json.JSONDecodeError as exc:
@@ -243,37 +205,22 @@ def parse_reference_tags_batch(references: list[str]) -> list[dict[str, Any] | N
             "AnyStyle batch parsing returned malformed JSON.",
             http_status=503,
         ) from exc
-<<<<<<< HEAD
     
-=======
-
->>>>>>> f727102 (Update public release files)
     if not isinstance(payload, list):
         raise ReferenceParsingError(
             "anystyle_invalid_output",
             "AnyStyle batch parsing returned an unexpected JSON payload.",
             http_status=503,
         )
-<<<<<<< HEAD
     
     # Map parsed results back to original reference positions
     results: list[dict[str, Any] | None] = [None] * len(references)
     
-=======
-
-    # Map parsed results back to original reference positions
-    results: list[dict[str, Any] | None] = [None] * len(references)
-
->>>>>>> f727102 (Update public release files)
     for i, original_index in enumerate(index_map):
         if i < len(payload):
             item = payload[i]
             if isinstance(item, dict):
                 results[original_index] = item
             # If not a dict, leave as None
-<<<<<<< HEAD
     
-=======
-
->>>>>>> f727102 (Update public release files)
     return results

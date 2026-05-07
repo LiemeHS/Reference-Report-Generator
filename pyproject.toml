@@ -1,0 +1,45 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "reference-gen2"
+version = "0.2.0"
+description = "Self-hosted reference-list checker for PDFs, DOCX files, and pasted bibliographies."
+readme = "README.md"
+requires-python = ">=3.11"
+license = { text = "BSD-3-Clause" }
+classifiers = [
+  "License :: OSI Approved :: BSD License",
+  "Programming Language :: Python :: 3",
+  "Programming Language :: Python :: 3.11",
+]
+dependencies = [
+  "citeproc-py",
+  "fastapi",
+  "pdfplumber",
+  "python-multipart",
+  "python-docx",
+  "uvicorn",
+]
+
+[project.optional-dependencies]
+test = [
+  "httpx",
+  "pytest",
+]
+
+[tool.setuptools]
+package-dir = {"" = "."}
+
+[tool.setuptools.packages.find]
+where = ["."]
+include = ["reference_gen2*"]
+
+[tool.setuptools.package-data]
+"reference_gen2.citation_rendering" = ["styles/*.csl"]
+"reference_gen2.api.static" = ["*.html", "*.css", "*.js"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+pythonpath = ["."]

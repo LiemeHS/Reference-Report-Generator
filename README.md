@@ -228,8 +228,6 @@ want uploads scanned by an external tool.
 
 Dependency policy documentation is available in [docs/security/dependency_policy.md](./docs/security/dependency_policy.md).
 
-<<<<<<< HEAD
-=======
 ## License
 
 Reference Gen2 is licensed under the BSD 3-Clause License. See
@@ -238,7 +236,6 @@ Reference Gen2 is licensed under the BSD 3-Clause License. See
 Third-party dependencies, tools, metadata sources, and container images keep
 their own licenses and terms. See [THIRD_PARTY_NOTICES.md](./THIRD_PARTY_NOTICES.md).
 
->>>>>>> f727102 (Update public release files)
 ## Development And Attribution
 
 This tool was created with AI-assisted development, including Codex and OpenAI
